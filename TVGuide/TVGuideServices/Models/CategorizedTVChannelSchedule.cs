@@ -5,9 +5,9 @@
     using System.Linq;
     using System.Web;
 
-    public class TVChannelScheduleForSeries
+    public class CategorizedTVChannelSchedule
     {
-        public TVChannelScheduleForSeries(string nameOfTV, List<TVSeriesEntry> series)
+        public CategorizedTVChannelSchedule(string nameOfTV, List<CategorizedScheduleEntry> series)
         {
             this.NameOfTV = nameOfTV;
             this.Series = series;
@@ -15,6 +15,6 @@
 
         public string NameOfTV { get; set; }
 
-        public List<TVSeriesEntry> Series { get; set; }
+        public List<CategorizedScheduleEntry> Series { get; set; }
     }
 }

@@ -5,9 +5,9 @@
     using System.Linq;
     using System.Web;
 
-    public class TVSeriesEntry
+    public class CategorizedScheduleEntry
     {
-        public TVSeriesEntry(string name, string time, string day)
+        public CategorizedScheduleEntry(string name, string time, string day)
         {
             this.Name = name;
             this.Time = time;

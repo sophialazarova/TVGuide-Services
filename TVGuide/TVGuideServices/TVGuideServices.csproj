@@ -84,9 +84,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\TVChannelScheduleForSeries.cs" />
+    <Compile Include="Models\CategorizedTVChannelSchedule.cs" />
     <Compile Include="Models\TVProgramEntry.cs" />
-    <Compile Include="Models\TVSeriesEntry.cs" />
+    <Compile Include="Models\CategorizedScheduleEntry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -10,7 +10,6 @@
     using System.Web;
     using System.Web.Http;
     using TVGuideServices.Models;
-
     public class TVGuideController : ApiController
     {
         [HttpGet]
@@ -53,9 +52,30 @@
         [HttpGet]
         public async Task<IHttpActionResult> GetTVSeriesSchedule(string date)
         {
-            const string INITIAL_URL = "http://www.start.bg/lenta/tv-programa/tv/seriali";
+            String url = "http://www.start.bg/lenta/tv-programa/tv/seriali";
+            var result = await this.GetCategorizedSchedule(url, date);
+            return result;
+        }
 
-            var url = INITIAL_URL + "/" + date;
+        [HttpGet]
+        public async Task<IHttpActionResult> GetSportsSchedule(string date)
+        {
+            String url = "http://www.start.bg/lenta/tv-programa/tv/sport";
+            var result = await this.GetCategorizedSchedule(url, date);
+            return result;
+        }
+
+         [HttpGet]
+         public async Task<IHttpActionResult> GetMoviesSchedule(string date)
+         {
+             String url = "http://www.start.bg/lenta/tv-programa/tv/filmi";
+             var result = await this.GetCategorizedSchedule(url, date);
+             return result;
+         }
+
+        private async Task<IHttpActionResult> GetCategorizedSchedule(string initialURL, string date)
+        {
+            var url = initialURL + "/" + date;
             var client = new HttpClient();
             var request = new HttpRequestMessage();
             request.RequestUri = new Uri(url);
@@ -70,28 +90,27 @@
                 var channels = htmlDoc.DocumentNode.SelectNodes("//div[@class=\"channel\"]");
                 var series = htmlDoc.DocumentNode.SelectNodes("//ul[@class=\"tv-dlist search\"]").Where(node => node.InnerText.Trim() != string.Empty).ToList();
                 var resChannels = channels.Select(node => node.InnerText).ToList();
-                var dict = new List<TVChannelScheduleForSeries>();
+                var dict = new List<CategorizedTVChannelSchedule>();
                 for (int i = 0; i < series.Count; i++)
                 {
                     var entry = series[i];
                     var info = entry.SelectNodes("li");
-                    var seriesOnChannel = new List<TVSeriesEntry>();
+                    var seriesOnChannel = new List<CategorizedScheduleEntry>();
                     for (int j = 0; j < info.Count; j++)
                     {
                         var li = info[j];
                         var day = li.SelectSingleNode("div[@class=\"day\"]").InnerText;
                         var name = li.SelectSingleNode("div[@class=\"title\"]").InnerText.Replace("\r", string.Empty);
                         var time = li.SelectSingleNode("div[@class=\"time\"]").InnerText;
-                        TVSeriesEntry s = new TVSeriesEntry(name, time, day);
+                        CategorizedScheduleEntry s = new CategorizedScheduleEntry(name, time, day);
                         seriesOnChannel.Add(s);
                     }
 
-                    dict.Add(new TVChannelScheduleForSeries(resChannels[i], seriesOnChannel));
+                    dict.Add(new CategorizedTVChannelSchedule(resChannels[i], seriesOnChannel));
                 }
 
                 return Ok(dict);
             }
         }
-
     }
 }
